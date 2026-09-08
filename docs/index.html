@@ -55,6 +55,7 @@ button[disabled]{opacity:.6;cursor:default}
     Decryption happens in your browser. The passphrase is never sent anywhere and there
     is nothing here to send it to. Unlocking takes a second or two on purpose: the key
     is stretched through 600,000 rounds, which is what makes guessing expensive.
+    Spaces before or after what you paste are ignored.
   </div>
 </main>
 
@@ -85,7 +86,12 @@ button[disabled]{opacity:.6;cursor:default}
 
   f.addEventListener('submit', function(e){
     e.preventDefault();
-    var pass = pw.value;
+    /* Trim first. A passphrase copied out of a note or a password manager very
+       often arrives with a leading indent or a trailing newline, and a field that
+       does not trim turns that into "wrong passphrase" with no clue why. Nobody
+       deliberately puts spaces on the ends of a four-word passphrase, so there is
+       nothing to lose here. */
+    var pass = pw.value.replace(/^\s+|\s+$/g, '');
     if(!pass){ say('Enter the passphrase.', true); return; }
     go.disabled = true; say('Working. This takes a second or two.');
 
